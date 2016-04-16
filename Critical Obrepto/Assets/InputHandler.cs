@@ -30,7 +30,7 @@ public class InputHandler : MonoBehaviour
             onMove(Vector2.right);
         if (!(movedW || movedS || movedA || movedD))
             onStop();
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
             onJump();
         onAimMove(Input.mousePosition - prevMousePos);
         prevMousePos = Input.mousePosition;
