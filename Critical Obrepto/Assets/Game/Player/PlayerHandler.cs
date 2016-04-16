@@ -40,7 +40,7 @@ public class PlayerHandler : MonoBehaviour
         };
         InputHandler.instance.onJump = () =>
         {
-            if (jumping == false && _characterController.isGrounded)
+            if (jumping == false)
             {
                 _velocity.y = 6;
                 jumping = true;
@@ -63,13 +63,10 @@ public class PlayerHandler : MonoBehaviour
             if (jumping)
                 jumping = false;
             else
-                _velocity.y = 0;
+                _velocity.y = 0.0f;
         }
 
         _characterController.Move(_velocity * Time.deltaTime);
-
-        if (jumping && _characterController.isGrounded)
-            jumping = false;
     }
 
     void LateUpdate()
