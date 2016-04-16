@@ -9,7 +9,8 @@ public class PlayerHandler : MonoBehaviour
     Transform _waistTr;
     Vector3 _overrideRotation;
     Vector3 _velocity;
-    bool jumping = false;
+    bool _jumping = false;
+    const float _kJumpPower = 6;
 
     void Awake()
     {
@@ -40,10 +41,10 @@ public class PlayerHandler : MonoBehaviour
         };
         InputHandler.instance.onJump = () =>
         {
-            if (jumping == false)
+            if (_jumping == false)
             {
-                _velocity.y = 6;
-                jumping = true;
+                _velocity.y = _kJumpPower;
+                _jumping = true;
             }
         };
         InputHandler.instance.onAimMove = v =>
@@ -57,14 +58,13 @@ public class PlayerHandler : MonoBehaviour
 
     void Update()
     {
+        if (_characterController.isGrounded && _jumping&& _velocity.y != _kJumpPower)
+            _jumping = false;
+
         _velocity += Physics.gravity * Time.deltaTime;
-        if (_characterController.isGrounded)
-        {
-            if (jumping)
-                jumping = false;
-            else
-                _velocity.y = 0.0f;
-        }
+
+        if (_characterController.isGrounded&& _jumping == false)
+            _velocity.y = 0.0f;
 
         _characterController.Move(_velocity * Time.deltaTime);
     }

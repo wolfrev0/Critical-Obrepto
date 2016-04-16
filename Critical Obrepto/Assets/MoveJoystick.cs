@@ -6,16 +6,16 @@ public class MoveJoystick : MonoBehaviour, IBeginDragHandler,IDragHandler, IEndD
 {
     RectTransform _rt;
     Vector2 _originPos;
-    bool _update = false;
+    bool _moving = false;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        _update = true;
+        _moving = true;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        _update = false;
+        _moving = false;
         _rt.anchoredPosition = _originPos;
     }
 
@@ -27,12 +27,14 @@ public class MoveJoystick : MonoBehaviour, IBeginDragHandler,IDragHandler, IEndD
 
     void Update()
     {
-        if (_update)
+        if (_moving)
         {
             _rt.position = Input.mousePosition;
             var toPosition = _rt.anchoredPosition - _originPos;
             InputHandler.instance.onMove(toPosition.normalized);
         }
+        else
+            InputHandler.instance.onStop();
     }
 
     public void OnDrag(PointerEventData eventData)

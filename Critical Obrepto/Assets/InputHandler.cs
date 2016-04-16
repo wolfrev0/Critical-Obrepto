@@ -35,4 +35,9 @@ public class InputHandler : MonoBehaviour
         onAimMove(Input.mousePosition - prevMousePos);
         prevMousePos = Input.mousePosition;
     }
+
+    public void Jump()
+    {
+        onJump();
+    }
 }
