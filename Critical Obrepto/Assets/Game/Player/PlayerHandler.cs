@@ -4,13 +4,15 @@ using System.Collections;
 public class PlayerHandler : MonoBehaviour
 {
     public float moveSpeed = 4;
+    [SerializeField]
+    GameObject _pfBulletMark = null;
     CharacterController _characterController;
     Animator _animator;
     Transform _waistTr;
     Vector3 _overrideRotation;
     Vector3 _velocity;
     bool _jumping = false;
-    const float _kJumpPower = 6;
+    const float _jumpPower = 6;
 
     void Awake()
     {
@@ -54,7 +56,7 @@ public class PlayerHandler : MonoBehaviour
             //현재 1번 방법을 사용중이며, 추후에 2번으로 변경해야할 경우가 생길수도 있으니 주석 달아둠.
             if (_jumping == false && _characterController.isGrounded)
             {
-                _velocity.y = _kJumpPower;
+                _velocity.y = _jumpPower;
                 _jumping = true;
 
                 _animator.SetBool("Jump", true);
@@ -70,16 +72,30 @@ public class PlayerHandler : MonoBehaviour
         InputHandler.instance.onShootEnter = () =>
         {
             _animator.SetBool("Shoot", true);
+            InvokeRepeating("Shoot", 0, 0.1f);
         };
         InputHandler.instance.onShootExit = () =>
         {
             _animator.SetBool("Shoot", false);
+            CancelInvoke("Shoot");
         };
+    }
+
+    void Shoot()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+        RaycastHit hit;
+        if(Physics.Raycast(ray, out hit, float.MaxValue))
+        {
+            var bulletMark = Instantiate(_pfBulletMark);
+            bulletMark.transform.position = hit.point + hit.normal * 0.01f;
+            bulletMark.transform.LookAt(bulletMark.transform.position + hit.normal);
+        }
     }
 
     void Update()
     {
-        if (_characterController.isGrounded && _jumping && _velocity.y != _kJumpPower)
+        if (_characterController.isGrounded && _jumping && _velocity.y != _jumpPower)
         {
             _jumping = false;
             _animator.SetBool("Jump", false);
