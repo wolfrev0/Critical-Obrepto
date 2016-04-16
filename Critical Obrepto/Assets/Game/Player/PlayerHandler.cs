@@ -67,6 +67,14 @@ public class PlayerHandler : MonoBehaviour
             _overrideRotation += new Vector3(0, 0, v.y);
             transform.localEulerAngles += new Vector3(0, v.x, 0);
         };
+        InputHandler.instance.onShootEnter = () =>
+        {
+            _animator.SetBool("Shoot", true);
+        };
+        InputHandler.instance.onShootExit = () =>
+        {
+            _animator.SetBool("Shoot", false);
+        };
     }
 
     void Update()

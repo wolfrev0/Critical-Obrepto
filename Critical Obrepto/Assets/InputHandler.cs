@@ -8,13 +8,13 @@ public class InputHandler : MonoBehaviour
     public Action onStop { get; set; }
     public Action onJump { get; set; }
     public Action<Vector2> onAimMove { get; set; }
+    public Action onShootEnter { get; set; }
+    public Action onShootExit { get; set; }
     Vector3 prevMousePos;
 
     void Awake()
     {
         instance = this;
-        onMove = v => { };
-        onStop = () => { };
     }
 
     void Update()
@@ -32,6 +32,10 @@ public class InputHandler : MonoBehaviour
             onStop();
         if (Input.GetKey(KeyCode.Space))
             onJump();
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+            onShootEnter();
+        if (Input.GetKeyUp(KeyCode.Mouse0))
+            onShootExit();
         onAimMove(Input.mousePosition - prevMousePos);
         prevMousePos = Input.mousePosition;
     }
@@ -39,5 +43,15 @@ public class InputHandler : MonoBehaviour
     public void Jump()
     {
         onJump();
+    }
+
+    public void ShootEnter()
+    {
+        onShootEnter();
+    }
+
+    public void ShootExit()
+    {
+        onShootExit();
     }
 }
