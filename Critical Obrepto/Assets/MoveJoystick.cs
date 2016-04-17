@@ -4,33 +4,33 @@ using UnityEngine.EventSystems;
 
 public class MoveJoystick : MonoBehaviour, IBeginDragHandler,IDragHandler, IEndDragHandler
 {
-    RectTransform _rt;
-    Vector2 _originPos;
-    bool _moving = false;
+    RectTransform rt;
+    Vector2 originPos;
+    bool moving = false;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        _moving = true;
+        moving = true;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        _moving = false;
-        _rt.anchoredPosition = _originPos;
+        moving = false;
+        rt.anchoredPosition = originPos;
     }
 
     void Awake()
     {
-        _rt = GetComponent<RectTransform>();
-        _originPos = _rt.anchoredPosition;
+        rt = GetComponent<RectTransform>();
+        originPos = rt.anchoredPosition;
     }
 
     void Update()
     {
-        if (_moving)
+        if (moving)
         {
-            _rt.position = Input.mousePosition;
-            var toPosition = _rt.anchoredPosition - _originPos;
+            rt.position = Input.mousePosition;
+            var toPosition = rt.anchoredPosition - originPos;
             InputHandler.instance.onMove(toPosition.normalized);
         }
         else
