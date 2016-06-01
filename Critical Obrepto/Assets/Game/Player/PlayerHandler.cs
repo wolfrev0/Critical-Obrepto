@@ -8,6 +8,7 @@ public class PlayerHandler : MonoBehaviour
     GameObject pfBulletMark = null;
     CharacterController characterController;
     Transform cameraTr;
+    Transform HeadTr;
     Animator animator;
     Transform waistTr;
     Vector3 waistOriginPos;
@@ -22,6 +23,7 @@ public class PlayerHandler : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         cameraTr = Camera.main.transform;
         animator = GetComponentInChildren<Animator>();
+        HeadTr = animator.GetBoneTransform(HumanBodyBones.Head);
         waistTr = animator.GetBoneTransform(HumanBodyBones.Chest);
         waistOriginPos = waistTr.position - transform.position;
         overrideRotation = waistTr.localEulerAngles;
@@ -93,9 +95,13 @@ public class PlayerHandler : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(ray, out hit, float.MaxValue))
         {
-            var bulletMark = Instantiate(pfBulletMark);
-            bulletMark.transform.position = hit.point + hit.normal * 0.01f;
-            bulletMark.transform.LookAt(bulletMark.transform.position + hit.normal);
+            Ray headToHitRay = new Ray(HeadTr.position, (hit.point - HeadTr.position).normalized);
+            if (Physics.Raycast(headToHitRay, out hit, float.MaxValue))
+            {
+                var bulletMark = Instantiate(pfBulletMark);
+                bulletMark.transform.position = hit.point + hit.normal * 0.01f;
+                bulletMark.transform.LookAt(bulletMark.transform.position + hit.normal);
+            }
         }
     }
 
