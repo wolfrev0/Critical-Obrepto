@@ -11,7 +11,6 @@ public class PlayerHandler : MonoBehaviour
     Transform HeadTr;
     Animator animator;
     Transform waistTr;
-    Vector3 waistOriginPos;
     Vector3 overrideRotation;
     float cameraRotationX;
     Vector3 velocity;
@@ -25,7 +24,6 @@ public class PlayerHandler : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         HeadTr = animator.GetBoneTransform(HumanBodyBones.Head);
         waistTr = animator.GetBoneTransform(HumanBodyBones.Chest);
-        waistOriginPos = waistTr.position - transform.position;
         overrideRotation = waistTr.localEulerAngles;
     }
 
@@ -69,7 +67,7 @@ public class PlayerHandler : MonoBehaviour
                 animator.SetBool("Jump", true);
             }
         };
-        InputHandler.instance.onAimMove = v =>
+        InputHandler.instance.onAimMovePC = v =>
         {
             if (90 < waistTr.localEulerAngles.z + v.y && waistTr.localEulerAngles.z + v.y < 270)
                 v.y = 0;
@@ -77,6 +75,16 @@ public class PlayerHandler : MonoBehaviour
             cameraRotationX += v.y;
             transform.localEulerAngles += new Vector3(0, v.x, 0);
         };
+
+        InputHandler.instance.onAimMoveMobile = v =>
+        {
+            if (90 < waistTr.localEulerAngles.z + v.x && waistTr.localEulerAngles.z + v.x < 270)
+                v.x = 0;
+            overrideRotation += new Vector3(0, 0, v.x);
+            cameraRotationX += v.x;
+            transform.localEulerAngles += new Vector3(0, v.y, 0);
+        };
+
         InputHandler.instance.onShootEnter = () =>
         {
             animator.SetBool("Shoot", true);
