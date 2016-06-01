@@ -27,6 +27,8 @@ public class MoveJoystick : MonoBehaviour, IBeginDragHandler,IDragHandler, IEndD
 
     void Update()
     {
+        if (InputHandler.instance.UIType != UIType.Mobile)
+            return;
         if (moving)
         {
             rt.position = Input.mousePosition;
