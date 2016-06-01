@@ -16,14 +16,12 @@ public class open_door : MonoBehaviour
 	public float smooth = (float)2.0;
 	public float DoorOpenAngle = (float)110.0;
 	public float DoorCloseAngle = (float)0.0;
-	public bool open = false;
 	public bool enter = false;
-	public string defined_key = "e";
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		if(open == true)
+		if(enter == true)
 		{
 			var target = Quaternion.Euler (transform.localRotation.x, DoorOpenAngle, transform.localRotation.z);
 			// Dampen towards the target rotation
@@ -31,21 +29,13 @@ public class open_door : MonoBehaviour
 			Time.deltaTime * smooth);
 		}
 	
-		if(open == false)
+		if(enter == false)
 		{
 			var target1 = Quaternion.Euler (transform.localRotation.x, DoorCloseAngle, transform.localRotation.z);
 			// Dampen towards the target rotation
 			transform.localRotation = Quaternion.Slerp(transform.localRotation, target1,
 			Time.deltaTime * smooth);
 		}
-	
-		if(enter == true)
-		{
-			if(Input.GetKeyDown(defined_key))
-			{
-				open = !open;
-			}
-		}	
 	}
 
 	//Activate the Main function when player is near the door

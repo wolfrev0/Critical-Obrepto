@@ -130,7 +130,7 @@ public class PlayerHandler : MonoBehaviour
 
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, (camPos - focus).magnitude))
-            camPos = hit.point + hit.normal * 0.1f;
+            camPos = hit.point + hit.normal * 0.3f;
         cameraTr.position = camPos;
         cameraTr.LookAt(focus);
     }
