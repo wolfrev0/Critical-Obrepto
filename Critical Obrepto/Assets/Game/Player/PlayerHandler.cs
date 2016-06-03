@@ -4,6 +4,7 @@ using System.Collections;
 public class PlayerHandler : MonoBehaviour
 {
     public float moveSpeed = 4;
+    public int ammo = 30;
     [SerializeField]
     GameObject pfBulletMark = null;
     CharacterController characterController;
@@ -87,8 +88,11 @@ public class PlayerHandler : MonoBehaviour
 
         InputHandler.instance.onShootEnter = () =>
         {
-            animator.SetBool("Shoot", true);
-            InvokeRepeating("Shoot", 0, 0.1f);
+            if (ammo > 0)
+            {
+                animator.SetBool("Shoot", true);
+                InvokeRepeating("Shoot", 0, 0.1f);
+            }
         };
         InputHandler.instance.onShootExit = () =>
         {
@@ -101,16 +105,25 @@ public class PlayerHandler : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
-        if(Physics.Raycast(ray, out hit, float.MaxValue))
+        if (Physics.Raycast(ray, out hit, float.MaxValue, LayerMask.GetMask("Default", "Enemy")))
         {
             Ray headToHitRay = new Ray(HeadTr.position, (hit.point - HeadTr.position).normalized);
             if (Physics.Raycast(headToHitRay, out hit, float.MaxValue))
             {
-                var bulletMark = Instantiate(pfBulletMark);
-                bulletMark.transform.position = hit.point + hit.normal * 0.01f;
-                bulletMark.transform.LookAt(bulletMark.transform.position + hit.normal);
+                if (hit.transform.tag == "Enemy")
+                {
+                    Destroy(hit.transform.gameObject);
+                }
+                else
+                {
+                    var bulletMark = Instantiate(pfBulletMark);
+                    bulletMark.transform.position = hit.point + hit.normal * 0.01f;
+                    bulletMark.transform.LookAt(bulletMark.transform.position + hit.normal);
+                }
             }
         }
+        if (--ammo <= 0)
+            InputHandler.instance.onShootExit();
     }
 
     void Update()
