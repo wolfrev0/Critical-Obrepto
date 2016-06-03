@@ -3,23 +3,20 @@ using System.Collections;
 
 public class ZombieHandler : MonoBehaviour
 {
-    static Transform playerTr = null;
-    NavMeshAgent nma;
+    int hp = 3;
 
     void Awake()
+    {}
+
+    public void ApplyDamage()
     {
-    //    if (playerTr == null)
-    //        playerTr = FindObjectOfType<PlayerHandler>().transform;
-    //    StartCoroutine(RenewDestination());
-    //    nma = GetComponent<NavMeshAgent>();
+        if (--hp <= 0)
+            Destroy(gameObject);
     }
 
-    IEnumerator RenewDestination()
+    void OnTriggerEnter(Collider coll)
     {
-        while(true)
-        {
-            yield return new WaitForSeconds(1);
-            nma.SetDestination(playerTr.position);
-        }
+        if (coll.tag == "Player")
+            coll.GetComponent<PlayerHandler>().Die();
     }
 }

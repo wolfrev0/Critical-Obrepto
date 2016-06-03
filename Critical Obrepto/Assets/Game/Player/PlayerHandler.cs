@@ -112,7 +112,7 @@ public class PlayerHandler : MonoBehaviour
             {
                 if (hit.transform.tag == "Enemy")
                 {
-                    Destroy(hit.transform.gameObject);
+                    hit.transform.GetComponent<ZombieHandler>().ApplyDamage();
                 }
                 else
                 {
@@ -160,5 +160,15 @@ public class PlayerHandler : MonoBehaviour
             camPos = hit.point + hit.normal * 0.3f;
         cameraTr.position = camPos;
         cameraTr.LookAt(focus);
+    }
+
+    public void Die()
+    {
+        Destroy(gameObject);
+    }
+
+    public void AddAmmo(int amount)
+    {
+        ammo += amount;
     }
 }
