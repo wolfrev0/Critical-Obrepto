@@ -47,16 +47,16 @@ public class open_door : MonoBehaviour
 			(enter) = true;
 		}
 	}
-	
-	//Deactivate the Main function when player is go away from door
-	void OnTriggerExit (Collider other)
-	{
-		if (other.gameObject.tag == "Player") 
-		{
-			//Debug.Log("Trigger Exit");
-			(enter) = false;
-		}
-	}
+
+    //Deactivate the Main function when player is go away from door
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Player" || other.gameObject.tag == "Enemy")
+        {
+            //Debug.Log("Trigger Exit");
+            (enter) = false;
+        }
+    }
 	//@youtube.com/user/maksimum654321
 }
 

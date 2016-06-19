@@ -8,6 +8,7 @@ public class MoveJoystick : MonoBehaviour, IBeginDragHandler,IDragHandler, IEndD
     Vector2 originPos;
     Vector2 mousePos;
     bool moving = false;
+    PlayerHandler player;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -24,10 +25,13 @@ public class MoveJoystick : MonoBehaviour, IBeginDragHandler,IDragHandler, IEndD
     {
         rt = GetComponent<RectTransform>();
         originPos = rt.anchoredPosition;
+        player = FindObjectOfType<PlayerHandler>();
     }
 
     void Update()
     {
+        if (player.died)
+            return;
         if (InputHandler.instance.UIType != UIType.Mobile)
             return;
         if (moving)

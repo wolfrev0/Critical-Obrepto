@@ -3,28 +3,27 @@ using System.Collections;
 
 public class ZombieRun : StateMachineBehaviour
 {
-    static Transform playerTr = null;
-    NavMeshAgent nma;
-
+    NavMeshAgent nma = null;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (playerTr == null)
-        {
-            playerTr = FindObjectOfType<PlayerHandler>().transform;
-            nma = animator.GetComponentInParent<NavMeshAgent>();
-        }
+        if(nma==null)
+            nma = animator.GetComponent<NavMeshAgent>();
         nma.enabled = true;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        nma.SetDestination(playerTr.position);
+        nma.SetDestination(PlayerHandler.instance.transform.position);
 
-        if(Vector3.Distance(playerTr.position, animator.transform.position) >= 15)
+        if (Vector3.Distance(PlayerHandler.instance.transform.position, animator.transform.position) >= 25 || PlayerHandler.instance.died)
         {
             animator.SetBool("Trace", false);
+        }
+        if (Vector3.Distance(PlayerHandler.instance.transform.position, animator.transform.position) < 1.5f && PlayerHandler.instance.died==false)
+        {
+            animator.SetBool("Attack", true);
         }
     }
 

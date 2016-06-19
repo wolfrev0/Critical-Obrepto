@@ -1,0 +1,131 @@
+fileFormatVersion: 2
+guid: 5da52f2ef89cca441bb3e25a28c0de36
+timeCreated: 1464929915
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Door
+    100002: glass
+    100004: hinge_down
+    100006: hinge_up
+    100008: lock
+    100010: old_shed 1
+    100012: //RootNode
+    100014: plank_door
+    100016: Planks_roof
+    100018: planks_window
+    100020: Roof
+    100022: Walls
+    100024: window
+    400000: Door
+    400002: glass
+    400004: hinge_down
+    400006: hinge_up
+    400008: lock
+    400010: old_shed 1
+    400012: //RootNode
+    400014: plank_door
+    400016: Planks_roof
+    400018: planks_window
+    400020: Roof
+    400022: Walls
+    400024: window
+    2300000: Door
+    2300002: glass
+    2300004: hinge_down
+    2300006: hinge_up
+    2300008: lock
+    2300010: plank_door
+    2300012: Planks_roof
+    2300014: planks_window
+    2300016: Roof
+    2300018: Walls
+    2300020: window
+    3300000: Door
+    3300002: glass
+    3300004: hinge_down
+    3300006: hinge_up
+    3300008: lock
+    3300010: plank_door
+    3300012: Planks_roof
+    3300014: planks_window
+    3300016: Roof
+    3300018: Walls
+    3300020: window
+    4300000: glass
+    4300002: lock
+    4300004: Roof
+    4300006: Planks_roof
+    4300008: planks_window
+    4300010: plank_door
+    4300012: window
+    4300014: Door
+    4300016: hinge_up
+    4300018: Walls
+    4300020: hinge_down
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

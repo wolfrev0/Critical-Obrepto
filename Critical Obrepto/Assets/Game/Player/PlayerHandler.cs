@@ -1,10 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PlayerHandler : MonoBehaviour
 {
+    public static PlayerHandler instance;
     public float moveSpeed = 4;
-    public int ammo = 30;
+    public int ammo = 120;
+    public Image damageEffect;
+    public Image speedUpEffect;
+    public AudioClip gunFire;
+    AudioSource audio;
     [SerializeField]
     GameObject pfBulletMark = null;
     CharacterController characterController;
@@ -18,12 +24,31 @@ public class PlayerHandler : MonoBehaviour
     bool jumping = false;
     const float jumpPower = 6;
 
+    public int hp = 120;
+    int maxHp = 120;
+    public bool died = false;
+
+    public void SpeedUpOn()
+    {
+        moveSpeed = 8;
+        Invoke("SpeedUpOff", 5);        
+        speedUpEffect.enabled = true;
+    }
+
+    void SpeedUpOff()
+    {
+        moveSpeed = 4;
+        speedUpEffect.enabled = false;
+    }
+
     void Awake()
     {
+        instance = this;
         characterController = GetComponent<CharacterController>();
         cameraTr = Camera.main.transform;
         animator = GetComponentInChildren<Animator>();
         HeadTr = animator.GetBoneTransform(HumanBodyBones.Head);
+        audio = GetComponent<AudioSource>();
         waistTr = animator.GetBoneTransform(HumanBodyBones.Chest);
         overrideRotation = waistTr.localEulerAngles;
     }
@@ -32,6 +57,8 @@ public class PlayerHandler : MonoBehaviour
     {
         InputHandler.instance.onMove = v =>
         {
+            if (died)
+                return;
             v = Quaternion.Euler(0, 0, -transform.eulerAngles.y) * v;
             velocity.x += v.x / 2;
             velocity.z += v.y / 2;
@@ -46,6 +73,8 @@ public class PlayerHandler : MonoBehaviour
         };
         InputHandler.instance.onStop = () =>
         {
+            if (died)
+                return;
             velocity.x /= 1.5f;
             velocity.z /= 1.5f;
 
@@ -53,6 +82,8 @@ public class PlayerHandler : MonoBehaviour
         };
         InputHandler.instance.onJump = () =>
         {
+            if (died)
+                return;
             //CharacterController.isGrounded값이 계속 true/false로 튄다.
             //그 이유는 LateUpdate에서 계속 CharacterController.Move를 호출하기 때문인 것으로 사료되는데,
             //해결방법으로 2가지 정도를 생각해봤다.
@@ -70,6 +101,8 @@ public class PlayerHandler : MonoBehaviour
         };
         InputHandler.instance.onAimMovePC = v =>
         {
+            if (died)
+                return;
             if (90 < waistTr.localEulerAngles.z + v.y && waistTr.localEulerAngles.z + v.y < 270)
                 v.y = 0;
             overrideRotation += new Vector3(0, 0, v.y);
@@ -79,6 +112,8 @@ public class PlayerHandler : MonoBehaviour
 
         InputHandler.instance.onAimMoveMobile = v =>
         {
+            if (died)
+                return;
             if (90 < waistTr.localEulerAngles.z + v.x && waistTr.localEulerAngles.z + v.x < 270)
                 v.x = 0;
             overrideRotation += new Vector3(0, 0, v.x);
@@ -88,6 +123,8 @@ public class PlayerHandler : MonoBehaviour
 
         InputHandler.instance.onShootEnter = () =>
         {
+            if (died)
+                return;
             if (ammo > 0)
             {
                 animator.SetBool("Shoot", true);
@@ -96,6 +133,8 @@ public class PlayerHandler : MonoBehaviour
         };
         InputHandler.instance.onShootExit = () =>
         {
+            if (died)
+                return;
             animator.SetBool("Shoot", false);
             CancelInvoke("Shoot");
         };
@@ -122,6 +161,8 @@ public class PlayerHandler : MonoBehaviour
                 }
             }
         }
+        audio.clip = gunFire;
+        audio.Play();
         if (--ammo <= 0)
             InputHandler.instance.onShootExit();
     }
@@ -142,6 +183,9 @@ public class PlayerHandler : MonoBehaviour
 
     void LateUpdate()
     {
+        if (died)
+            return;
+
         characterController.Move(velocity * Time.deltaTime);
         waistTr.localEulerAngles = overrideRotation;
 
@@ -162,13 +206,43 @@ public class PlayerHandler : MonoBehaviour
         cameraTr.LookAt(focus);
     }
 
-    public void Die()
+    public void ApplyDamage(int amount)
     {
-        Destroy(gameObject);
+        CancelInvoke("DamageEffectOff");
+        damageEffect.enabled = true;
+        Invoke("DamageEffectOff", 2);
+        hp -= amount;
+        if(hp<=0)
+        {
+            hp = 0;
+            Die();
+        }
+        Handheld.Vibrate();
+    }
+
+    void DamageEffectOff()
+    {
+        damageEffect.enabled = false;
+    }
+
+    public void ApplyHeal(int amount)
+    {
+        hp += amount;
+        if (hp > maxHp)
+            hp = maxHp;
+    }
+
+    void Die()
+    {
+        died = true;
+        DieDialog.instance.Show(ScoreView.instance.GetScore());
+        animator.SetTrigger("Die");
     }
 
     public void AddAmmo(int amount)
     {
         ammo += amount;
+        if (ammo > 180)
+            ammo = 180;
     }
 }

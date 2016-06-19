@@ -4,10 +4,17 @@ using System.Collections;
 public class AmmoBox : MonoBehaviour
 {
     float elapsed = 0;
+    float originYPos;
 	
+    void Start()
+    {
+        Minimap.instance.AddAmmo(transform);
+        originYPos = transform.position.y;
+    }
+
 	void Update () {
         elapsed += Time.deltaTime;
-        transform.position = new Vector3(transform.position.x, Mathf.Sin(elapsed * 4) / 3 + 1, transform.position.z);
+        transform.position = new Vector3(transform.position.x, originYPos + Mathf.Sin(elapsed * 4) / 3 + 1, transform.position.z);
         transform.Rotate(0, Time.deltaTime * 180, 0, Space.World);
 	}
 
@@ -15,8 +22,16 @@ public class AmmoBox : MonoBehaviour
     {
         if(coll.tag == "Player")
         {
-            FindObjectOfType<PlayerHandler>().AddAmmo(30);
-            Destroy(gameObject);
+            Minimap.instance.Remove(transform);
+            FindObjectOfType<PlayerHandler>().AddAmmo(60);
+            transform.position += new Vector3(1000, 1000, 1000);
+            Invoke("Respawn", 60);
         }
+    }
+
+    void Respawn()
+    {
+        Minimap.instance.AddAmmo(transform);
+        transform.position -= new Vector3(1000, 1000, 1000);
     }
 }

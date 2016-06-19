@@ -8,7 +8,8 @@ public class MainMenuButtonHandler : MonoBehaviour
 
     public void OnStart()
     {
-        SceneManager.LoadScene("Game");
+        SoundManager.instance.PlayButton();
+        SceneManager.LoadScene("MapSelect");
     }
 
     public void OnRecords()
@@ -16,6 +17,7 @@ public class MainMenuButtonHandler : MonoBehaviour
 
     public void OnQuit()
     {
+        SoundManager.instance.PlayButton();
         Application.Quit();
     }
 }

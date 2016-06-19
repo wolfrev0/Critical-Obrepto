@@ -3,20 +3,26 @@ using System.Collections;
 
 public class ZombieHandler : MonoBehaviour
 {
-    int hp = 3;
+    public int hp;
+    public float power = 1;
 
     void Awake()
-    {}
+    {
+        ZombieSpawner.zombieCount++;
+        Minimap.instance.AddEnemy(transform);
+    }
 
     public void ApplyDamage()
     {
+        GetComponent<Animator>().SetTrigger("Wound");
         if (--hp <= 0)
-            Destroy(gameObject);
+        {
+            GetComponent<Animator>().SetTrigger("Die");
+        }
     }
 
-    void OnTriggerEnter(Collider coll)
+    void Attack()
     {
-        if (coll.tag == "Player")
-            coll.GetComponent<PlayerHandler>().Die();
+        PlayerHandler.instance.ApplyDamage((int)(Random.Range(10, 20) * power));
     }
 }

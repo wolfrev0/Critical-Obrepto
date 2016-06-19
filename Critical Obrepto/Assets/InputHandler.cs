@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum UIType
 {
@@ -11,6 +12,8 @@ public enum UIType
 public class InputHandler : MonoBehaviour
 {
     static public InputHandler instance { get; private set; }
+
+    PlayerHandler player;
 
     [SerializeField]
     UIType uiType = UIType.PC;
@@ -41,10 +44,17 @@ public class InputHandler : MonoBehaviour
         }
 
         Input.compass.enabled = true;
+        player = FindObjectOfType<PlayerHandler>();
     }
 
     void Update()
     {
+        if (player.died)
+            return;
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+            SceneManager.LoadScene("MainMenu");
+
         switch (uiType)
         {
             case UIType.PC:
